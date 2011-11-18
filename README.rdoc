@@ -1,0 +1,53 @@
+= key_struct
+
+Defines KeyStruct, which is the same as ruby's Struct, but the initializer
+takes keyword args (using a hash).  Use it to define a class via:
+
+  Name = KeyStruct[:first, :last]
+
+or as an anonymous base class for your own enhanced struct:
+
+  class Name < KeyStruct[:first, :last]
+    def to_s
+      "#{last}, #{first}"
+    end
+  end
+
+and then you have the usual
+
+  name = Name.new(:first => "Jack", :last => "Ripper")
+  name.first            --> "Jack"
+  name.last             --> "Ripper"
+  name.last = "Sprat"
+  name.last             --> "Sprat"
+  name.to_s             --> "Sprat, Jack" for the enhanced class example
+
+The gem actually provides two types of KeyStruct classes
+
+  KeyStruct.accesor(*keys)      # aliased as KeyStruct[]
+  KeyStruct.reader(*keys)       # has readers but not writers
+
+== Tested on
+
+MRI 1.9.2, 1.9.3
+
+== History
+
+Past History: I've wanted something like this for a while, but haven't found an existing gem.  So I wrote it myself.
+
+Future History: I hope that this gem will be obviated in future versions of ruby.
+
+== Note on Patches/Pull Requests
+ 
+* Fork the project.
+* Make your feature addition or bug fix.
+* Add tests for it. This is important so I don't break it in a
+  future version unintentionally.  Make sure that the coverage report is at 100%
+* Commit, do not mess with rakefile, version, or history.
+  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
+* Send me a pull request.
+
+== Copyright
+
+Released under the MIT License.  See LICENSE for details.
+
