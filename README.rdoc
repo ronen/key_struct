@@ -46,6 +46,16 @@ The gem actually provides two types of KeyStruct classes
   KeyStruct.accesor(*keys)      # aliased as KeyStruct[]
   KeyStruct.reader(*keys)       # class has readers but not writers
 
+== Installation
+
+Install via:
+
+   % gem install key_struct
+
+or in your Gemfile:
+
+   gem "key_struct"
+
 == Tested on
 
 MRI 1.9.2, 1.9.3
