@@ -3,15 +3,15 @@ require 'spec_helper'
 describe "KeyStruct" do
 
   it "creates a class using KeyStruct.accessor" do
-    Class.should === KeyStruct.accessor(:a, :b, :c)
+    Class.should === KeyStruct.accessor(:a, :b, :c => 3)
   end
 
   it "creates a class using KeyStruct.reader" do
-    Class.should === KeyStruct.reader(:a, :b, :c)
+    Class.should === KeyStruct.reader(:a, :b, :c => 3)
   end
 
   it "creates a class using KeyStruct[]" do
-    Class.should === KeyStruct[:a, :b, :c]
+    Class.should === KeyStruct[:a, :b, :c => 3]
   end
 
   it "[] should be an alias for accessor" do
@@ -20,7 +20,7 @@ describe "KeyStruct" do
 
   context "reader" do
     before(:all) do 
-      @klass = KeyStruct.reader(:a, :b, :c)
+      @klass = KeyStruct.reader(:a, :b, :c => 3)
     end
 
     it "provides getters" do
@@ -40,7 +40,7 @@ describe "KeyStruct" do
     end
 
     it "initializer accepts some key args" do
-      expect { @klass.new(:a => 1, :b => 2) }.should_not raise_error
+      expect { @klass.new(:a => 1) }.should_not raise_error
     end
 
     it "initializer accepts no args" do
@@ -51,17 +51,17 @@ describe "KeyStruct" do
       expect { @klass.new(:d => 4) }.should raise_error
     end
 
-    it "getters returns initial argument values" do
-      reader = @klass.new(:a => 1, :b => 2)
+    it "getters returns initial/default argument values" do
+      reader = @klass.new(:a => 1)
       reader.a.should == 1
-      reader.b.should == 2
-      reader.c.should be_nil
+      reader.b.should be_nil
+      reader.c.should == 3
     end
   end
 
   context "accessor" do
     before(:all) do 
-      @klass = KeyStruct.accessor(:a, :b, :c)
+      @klass = KeyStruct.accessor(:a, :b, :c => 3)
     end
 
     it "provides getters" do
@@ -81,7 +81,7 @@ describe "KeyStruct" do
     end
 
     it "initializer accepts some key args" do
-      expect { @klass.new(:a => 1, :b => 2) }.should_not raise_error
+      expect { @klass.new(:a => 1) }.should_not raise_error
     end
 
     it "initializer accepts no args" do
@@ -93,17 +93,17 @@ describe "KeyStruct" do
     end
 
     it "getters return initial argument values" do
-      reader = @klass.new(:a => 1, :b => 2)
+      reader = @klass.new(:a => 1)
       reader.a.should == 1
-      reader.b.should == 2
-      reader.c.should be_nil
+      reader.b.should be_nil
+      reader.c.should == 3
     end
 
     it "setters work as expected" do
-      reader = @klass.new(:a => 1, :b => 2)
-      reader.a = 3
+      reader = @klass.new(:a => 1)
+      reader.b = 2
       reader.c = 4
-      reader.a.should == 3
+      reader.a.should == 1
       reader.b.should == 2
       reader.c.should == 4
     end

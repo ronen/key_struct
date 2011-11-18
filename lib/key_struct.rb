@@ -19,13 +19,15 @@ module KeyStruct
   def self.define_key_struct(access, keys) 
     klass = Class.new
     klass.class_eval do
+      keyvalues = Hash[*keys.map{|key| (Hash === key) ? key.to_a : [key, nil]}.flatten]
+      keys = keyvalues.keys
       send access, *keys
-      define_method(:initialize) do |keyvalues={}|
-        keyvalues = keyvalues.dup
+      define_method(:initialize) do |args={}|
+        args = keyvalues.merge(args)
         keys.each do |key|
-          instance_variable_set("@#{key}", keyvalues.delete(key))
+          instance_variable_set("@#{key}", args.delete(key))
         end
-        raise ArgumentError, "Invalid argument(s): #{keyvalues.keys.map(&:inspect).join(' ')}; KeyStruct accepts #{keys.map(&:inspect).join(' ')}" if keyvalues.any?
+        raise ArgumentError, "Invalid argument(s): #{args.keys.map(&:inspect).join(' ')}; KeyStruct accepts #{keys.map(&:inspect).join(' ')}" if args.any?
       end
     end
     klass

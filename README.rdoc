@@ -1,7 +1,7 @@
 = key_struct
 
 Defines KeyStruct, which is the same as ruby's Struct, but the initializer
-takes keyword args (using a hash).  Use it to define a class via:
+takes keyword args (using a hash, rails-style).  Use it to define a class via:
 
   Name = KeyStruct[:first, :last]
 
@@ -9,23 +9,42 @@ or as an anonymous base class for your own enhanced struct:
 
   class Name < KeyStruct[:first, :last]
     def to_s
-      "#{last}, #{first}"
+      "#{@last}, #{@first}"
     end
   end
 
-and then you have the usual
+Then you can create an instance of the class using keywords for the parameters:
 
   name = Name.new(:first => "Jack", :last => "Ripper")
+
+and you have the usal readers and writers:
+
   name.first            --> "Jack"
   name.last             --> "Ripper"
   name.last = "Sprat"
   name.last             --> "Sprat"
   name.to_s             --> "Sprat, Jack" for the enhanced class example
 
+If you leave off a keyword when instantiating, normally the value is nil:
+
+  name = Name.new(:first => "Jack")
+  name.last             --> nil
+
+But the class definition can specify defaults, e.g.
+
+  Name = KeyStruct[:first, :last => "Doe"]
+  name = Name.new(:first => "John")
+  name.first            --> "John"
+  name.last             --> "Doe"
+
+The struct initializer checks for invalid arguments:
+
+  name = Name.new(:middle => "Xaviar")  --> raises ArgumentError
+
 The gem actually provides two types of KeyStruct classes
 
   KeyStruct.accesor(*keys)      # aliased as KeyStruct[]
-  KeyStruct.reader(*keys)       # has readers but not writers
+  KeyStruct.reader(*keys)       # class has readers but not writers
 
 == Tested on
 
@@ -33,17 +52,16 @@ MRI 1.9.2, 1.9.3
 
 == History
 
-Past History: I've wanted something like this for a while, but haven't found an existing gem.  So I wrote it myself.
-
-Future History: I hope that this gem will be obviated in future versions of ruby.
+Future: I hope that this gem will be obviated in future versions of ruby.
 
 == Note on Patches/Pull Requests
  
 * Fork the project.
 * Make your feature addition or bug fix.
 * Add tests for it. This is important so I don't break it in a
-  future version unintentionally.  Make sure that the coverage report is at 100%
-* Commit, do not mess with rakefile, version, or history.
+  future version unintentionally.  Make sure that the coverage report
+  (generated automatically when you run rspec) is at 100%
+* Commit, do not mess with Rakefile, version, or history.
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request.
 
