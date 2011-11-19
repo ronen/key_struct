@@ -56,9 +56,9 @@ or in your Gemfile:
 
    gem "key_struct"
 
-== Tested on
+== Versions
 
-MRI 1.9.2, 1.9.3
+Requires ruby >= 1.9.2.  (Has been tested on MRI 1.9.2 and MRI 1.9.3)
 
 == History
 
