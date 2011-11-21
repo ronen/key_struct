@@ -1,7 +1,8 @@
 = key_struct
 
-Defines KeyStruct, which is the same as ruby's Struct, but the initializer
-takes keyword args (using a hash, rails-style).  Use it to define a class via:
+Defines KeyStruct, which acts the same as ruby's Struct but the struct's
+initializer takes keyword args (using a hash, rails-style).  Use it to
+define a class via:
 
   Name = KeyStruct[:first, :last]
 
@@ -19,32 +20,46 @@ Then you can create an instance of the class using keywords for the parameters:
 
 and you have the usal readers and writers:
 
-  name.first            --> "Jack"
-  name.last             --> "Ripper"
+  name.first            # --> "Jack"
+  name.last             # --> "Ripper"
   name.last = "Sprat"
-  name.last             --> "Sprat"
-  name.to_s             --> "Sprat, Jack" for the enhanced class example
+  name.last             # --> "Sprat"
+  name.to_s             # --> "Sprat, Jack" for the enhanced class example
 
-If you leave off a keyword when instantiating, normally the value is nil:
+== Readers and Writers
+
+As per above, the normal behavior is get readers and writers.  But, by analogy with +attr_reader+ vs +attr_accessor+, you can choose whether you want read/write or just read:
+
+  Writeable = KeyStruct.accesor(:first, :last)      # aliased as KeyStruct[]
+  Readonly = KeyStruct.reader(:first, :last)        # class has readers but not writers
+
+== Default values
+
+If you leave off a keyword when instantiating, normally the member value is nil:
 
   name = Name.new(:first => "Jack")
-  name.last             --> nil
+  name.last             # --> nil
 
 But the class definition can specify defaults, e.g.
 
   Name = KeyStruct[:first, :last => "Doe"]
+
   name = Name.new(:first => "John")
-  name.first            --> "John"
-  name.last             --> "Doe"
+  name.first            # --> "John"
+  name.last             # --> "Doe"
+
+== Argument Checking
 
 The struct initializer checks for invalid arguments:
 
-  name = Name.new(:middle => "Xaviar")  --> raises ArgumentError
+  name = Name.new(:middle => "Xaviar")  # --> raises ArgumentError
 
-The gem actually provides two types of KeyStruct classes
+== Equaltiy
 
-  KeyStruct.accesor(*keys)      # aliased as KeyStruct[]
-  KeyStruct.reader(*keys)       # class has readers but not writers
+KeyStruct classes define the == operator, which returns true iff all corresponding struct members are equal (likewise via ==)
+
+    Name.new(:first => "John", :last => "Doe") == Name.new(:first => "John", :last => "Doe")    # --> true
+    Name.new(:first => "John", :last => "Doe") == Name.new(:first => "Jane", :last => "Doe")    # --> false
 
 == Installation
 

@@ -29,6 +29,9 @@ module KeyStruct
         end
         raise ArgumentError, "Invalid argument(s): #{args.keys.map(&:inspect).join(' ')}; KeyStruct accepts #{keys.map(&:inspect).join(' ')}" if args.any?
       end
+      define_method(:==) do |other|
+        keys.all?{|key| self.send(key) == other.send(key)}
+      end
     end
     klass
   end

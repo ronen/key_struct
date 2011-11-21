@@ -109,4 +109,16 @@ describe "KeyStruct" do
     end
   end
 
+  context "==" do
+    before(:all) do 
+      @klass = KeyStruct.accessor(:a, :b)
+    end
+
+    it "returns true iff all members are ==" do
+      @klass.new(:a => 1, :b => 2).should == @klass.new(:a => 1, :b => 2)
+      @klass.new(:a => 1, :b => 2).should_not == @klass.new(:a => 1, :b => 3)
+    end
+  end
+
+
 end
