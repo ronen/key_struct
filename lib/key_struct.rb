@@ -19,7 +19,7 @@ module KeyStruct
   def self.define_key_struct(access, keys) 
     klass = Class.new
     klass.class_eval do
-      keyvalues = Hash[*keys.map{|key| (Hash === key) ? key.to_a : [key, nil]}.flatten]
+      keyvalues = Hash[*keys.map{|key| (Hash === key) ? key.to_a : [key, nil]}.flatten(2)]
       keys = keyvalues.keys
       send access, *keys
       define_method(:initialize) do |args={}|

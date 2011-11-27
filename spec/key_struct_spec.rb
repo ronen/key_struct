@@ -14,6 +14,10 @@ describe "KeyStruct" do
     Class.should === KeyStruct[:a, :b, :c => 3]
   end
 
+  it "can handle a default that's an array" do
+    expect { KeyStruct.reader(:a => []) }.should_not raise_error
+  end
+
   it "[] should be an alias for accessor" do
     KeyStruct.method(:[]).should == KeyStruct.method(:accessor)
   end
