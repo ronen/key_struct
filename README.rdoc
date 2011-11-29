@@ -18,7 +18,7 @@ Then you can create an instance of the class using keywords for the parameters:
 
   name = Name.new(:first => "Jack", :last => "Ripper")
 
-and you have the usal readers and writers:
+and you have the usal readers and writers
 
   name.first            # --> "Jack"
   name.last             # --> "Ripper"
@@ -26,12 +26,27 @@ and you have the usal readers and writers:
   name.last             # --> "Sprat"
   name.to_s             # --> "Sprat, Jack" for the enhanced class example
 
-== Readers and Writers
 
-As per above, the normal behavior is get readers and writers.  But, by analogy with +attr_reader+ vs +attr_accessor+, you can choose whether you want read/write or just read:
+== Readers, Writers, and Instance Variables
+
+As per above, the normal behavior is to get readers and writers.  But, by analogy with +attr_reader+ vs +attr_accessor+, you can choose whether you want read/write or just read:
 
   Writeable = KeyStruct.accesor(:first, :last)      # aliased as KeyStruct[]
   Readonly = KeyStruct.reader(:first, :last)        # class has readers but not writers
+
+The analogy is not just skin deep: +KeyStruct+ actually uses
++attr_accessor+ or +attr_reader+ to define the accessors for the generated class.
+This means that you also get the corresponding instance variables:
+
+  name.instance_variable_get("@last") # --> "Sprat"
+  name.instance_variable_set("@last", "Sparrow")
+  name.last             # --> "Sparrow"
+
+The instance variables can be useful of course when using KeyStruct to define an anonymous
+base class for your own classes, as shown for the +to_s+ example above.
+
+(This is one way that +KeyStruct+ differs from ruby's built-in +Struct+:
+built-in +Struct+ does not define instance variables.)
 
 == Default values
 
@@ -40,7 +55,8 @@ If you leave off a keyword when instantiating, normally the member value is nil:
   name = Name.new(:first => "Jack")
   name.last             # --> nil
 
-But the class definition can specify defaults, e.g.
+But when you define the class you can specify defaults that will be filled in by
+the class initializer. For example:
 
   Name = KeyStruct[:first, :last => "Doe"]
 
@@ -48,11 +64,15 @@ But the class definition can specify defaults, e.g.
   name.first            # --> "John"
   name.last             # --> "Doe"
 
+  name = Name.new(:first => "John", :last => "Deere")
+  name.first            # --> "John"
+  name.last             # --> "Deere"
+
 == Argument Checking
 
 The struct initializer checks for invalid arguments:
 
-  name = Name.new(:middle => "Xaviar")  # --> raises ArgumentError
+  name = Name.new(:this_is_a_typo => "Xavier")  # --> raises ArgumentError
 
 == Equaltiy
 
@@ -77,17 +97,17 @@ Requires ruby >= 1.9.2.  (Has been tested on MRI 1.9.2 and MRI 1.9.3)
 
 == History
 
+Past: There was some discussion around this idea in this thread:
+http://www.ruby-forum.com/topic/138124 in 2008. 
+
 Future: I hope that this gem will be obviated in future versions of ruby.
 
 == Note on Patches/Pull Requests
  
 * Fork the project.
 * Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.  Make sure that the coverage report
+* Add tests for it.  Make sure that the coverage report
   (generated automatically when you run rspec) is at 100%
-* Commit, do not mess with Rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request.
 
 == Copyright
