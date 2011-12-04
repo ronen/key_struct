@@ -37,6 +37,9 @@ module KeyStruct
         end
         0
       end
+      define_method(:to_hash) do
+        Hash[*keys.map{ |key| [key, self.send(key)]}.flatten(2)]
+      end
       self
     end
   end

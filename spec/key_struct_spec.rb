@@ -141,6 +141,8 @@ describe "KeyStruct" do
 
   end
 
+  it "returns hash using to_hash" do
+    KeyStruct.accessor(:a => 3, :b => 4).new.to_hash.should == {:a => 3, :b => 4}
   end
 
 

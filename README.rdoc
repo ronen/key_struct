@@ -94,6 +94,13 @@ primary comparison key, and so on down the line.  Thus:
     LastFirst = KeyStruct[:last, :first]
     LastFirst.new(:first => "Abigail", :last => "Zither") <=> LastFirst.new(:first => "Zenobia", :last => "Aardvark") # --> +1
 
+== Converting to a hash
+
+KeyStruct classes define a +to_hash+ method that returns a hash containing
+all members and their values:
+
+        Name.new(:first => "Jack", :last => "Ripper").to_hash # --> {:first => "Jack", :last => "Ripper")
+
 == Installation
 
 Install via:
