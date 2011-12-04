@@ -117,6 +117,12 @@ Requires ruby >= 1.9.2.  (Has been tested on MRI 1.9.2 and MRI 1.9.3)
 
 == History
 
+Release Notes:
+
+* 0.2.0 - Introduced <=> and to_hash
+* 0.1.0 - Introduced ==
+* 0.0.1 - Initial version
+
 Past: There was some discussion around this idea in this thread:
 http://www.ruby-forum.com/topic/138124 in 2008. 
 
