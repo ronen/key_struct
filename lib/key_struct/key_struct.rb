@@ -16,6 +16,7 @@ module KeyStruct
 
   def self.define_key_struct(access, keys) 
     Class.new.class_eval do
+      include Comparable
       keyvalues = Hash[*keys.map{|key| (Hash === key) ? key.to_a : [key, nil]}.flatten(2)]
       keys = keyvalues.keys
       send access, *keys
@@ -28,6 +29,13 @@ module KeyStruct
       end
       define_method(:==) do |other|
         keys.all?{|key| self.send(key) == other.send(key)}
+      end
+      define_method(:<=>) do |other|
+        keys.each do |key|
+          cmp = (self.send(key) <=> other.send(key))
+          return cmp unless cmp == 0
+        end
+        0
       end
       self
     end

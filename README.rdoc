@@ -74,12 +74,25 @@ The struct initializer checks for invalid arguments:
 
   name = Name.new(:this_is_a_typo => "Xavier")  # --> raises ArgumentError
 
-== Equaltiy
+== Comparison
 
 KeyStruct classes define the == operator, which returns true iff all corresponding struct members are equal (likewise via ==)
 
     Name.new(:first => "John", :last => "Doe") == Name.new(:first => "John", :last => "Doe")    # --> true
     Name.new(:first => "John", :last => "Doe") == Name.new(:first => "Jane", :last => "Doe")    # --> false
+
+As a convenience when a well-defined ordering is needed, KeyStruct classes
+defines the <=> operator and includes the +Comparable+ module. The <=>
+operator applies <=> to the coresponding struct members sequentially,
+returning the first that is non-0. The comparison is performed in the order
+the keys were listed in the class definition, so the first key is the
+primary comparison key, and so on down the line.  Thus:
+
+    Name = KeyStruct[:first, :last]
+    Name.new(:first => "Abigail", :last => "Zither") <=> Name.new(:first => "Zenobia", :last => "Aardvark")           # --> -1
+
+    LastFirst = KeyStruct[:last, :first]
+    LastFirst.new(:first => "Abigail", :last => "Zither") <=> LastFirst.new(:first => "Zenobia", :last => "Aardvark") # --> +1
 
 == Installation
 

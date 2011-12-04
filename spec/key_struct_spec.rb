@@ -113,15 +113,34 @@ describe "KeyStruct" do
     end
   end
 
-  context "==" do
+  context "comparison" do
     before(:all) do 
-      @klass = KeyStruct.accessor(:a, :b)
+      @klass = KeyStruct.accessor(:a, :b, :c)
     end
 
     it "returns true iff all members are ==" do
       @klass.new(:a => 1, :b => 2).should == @klass.new(:a => 1, :b => 2)
       @klass.new(:a => 1, :b => 2).should_not == @klass.new(:a => 1, :b => 3)
     end
+
+    it "compares based on primary key" do
+      @klass.new(:a => 1, :b => 2).should < @klass.new(:a => 2, :b => 2)
+    end
+
+    it "compares based on second key if first is equal" do
+      @klass.new(:a => 1, :b => 2).should > @klass.new(:a => 1, :b => 1)
+    end
+
+    it "compares based on third key if first two are equal" do
+      @klass.new(:a => 1, :b => 2, :c => 3).should > @klass.new(:a => 1, :b => 2, :c => 1)
+    end
+
+    it "returns zero for <=> if all are equal" do
+      (@klass.new(:a => 1, :b => 2) <=> @klass.new(:a => 1, :b => 2)).should == 0
+    end
+
+  end
+
   end
 
 
