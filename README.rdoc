@@ -119,6 +119,7 @@ Requires ruby >= 1.9.2.  (Has been tested on MRI 1.9.2 and MRI 1.9.3)
 
 Release Notes:
 
+* 0.2.1 - Bug fix: return false for == with an incompatible object.  Was raising NoMethodError
 * 0.2.0 - Introduced <=> and to_hash
 * 0.1.0 - Introduced ==
 * 0.0.1 - Initial version
