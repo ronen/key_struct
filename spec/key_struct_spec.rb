@@ -123,6 +123,10 @@ describe "KeyStruct" do
       @klass.new(:a => 1, :b => 2).should_not == @klass.new(:a => 1, :b => 3)
     end
 
+    it "returns false for == against incompatible object" do
+      @klass.new(:a => 1, :b => 2).should_not == 3
+    end
+
     it "compares based on primary key" do
       @klass.new(:a => 1, :b => 2).should < @klass.new(:a => 2, :b => 2)
     end
