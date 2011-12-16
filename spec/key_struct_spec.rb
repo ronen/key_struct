@@ -149,5 +149,16 @@ describe "KeyStruct" do
     KeyStruct.accessor(:a => 3, :b => 4).new.to_hash.should == {:a => 3, :b => 4}
   end
 
+  context "display as a string" do
+    PrintMe = KeyStruct[:a => 3, :b => "hello"]
+
+    it "should be nice for :to_s" do
+      PrintMe.new.to_s.should == "[PrintMe a:3 b:hello]"
+    end
+
+    it "should be detailed for :inspect" do
+      PrintMe.new.inspect.should match /<PrintMe:0x[0-9a-f]+ a:3 b:"hello">/
+    end
+  end
 
 end

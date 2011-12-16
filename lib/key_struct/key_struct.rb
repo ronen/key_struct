@@ -40,6 +40,12 @@ module KeyStruct
       define_method(:to_hash) do
         Hash[*keys.map{ |key| [key, self.send(key)]}.flatten(2)]
       end
+      define_method(:to_s) do
+        "[#{self.class.name} #{keys.map{|key| "#{key}:#{self.send(key)}"}.join(' ')}]"
+      end
+      define_method(:inspect) do
+        "<#{self.class.name}:0x#{self.object_id.to_s(16)} #{keys.map{|key| "#{key}:#{self.send(key).inspect}"}.join(' ')}>"
+      end
       self
     end
   end
