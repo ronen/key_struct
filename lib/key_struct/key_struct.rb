@@ -38,7 +38,7 @@ module KeyStruct
         0
       end
       define_method(:to_hash) do
-        Hash[*keys.map{ |key| [key, self.send(key)]}.flatten(2)]
+        Hash[*keys.map{ |key| [key, self.send(key)]}.flatten(1)]
       end
       define_method(:to_s) do
         "[#{self.class.name} #{keys.map{|key| "#{key}:#{self.send(key)}"}.join(' ')}]"

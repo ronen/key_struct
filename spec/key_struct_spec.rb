@@ -149,6 +149,10 @@ describe "KeyStruct" do
     KeyStruct.accessor(:a => 3, :b => 4).new.to_hash.should == {:a => 3, :b => 4}
   end
 
+  it "returns hash using to_hash when value is array" do
+    KeyStruct.accessor(:a => 3, :b => [[1,2], [3,4]]).new.to_hash.should == {:a => 3, :b => [[1,2],[3,4]]}
+  end
+
   context "display as a string" do
     PrintMe = KeyStruct[:a => 3, :b => "hello"]
 
