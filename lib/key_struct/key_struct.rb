@@ -14,6 +14,51 @@ module KeyStruct
 
   private
 
+  class Base
+    include Comparable
+
+    class << self
+      attr_reader :keys, :defaults, :access
+    end
+
+    def initialize(args={})
+      args = self.class.defaults.merge(args)
+      self.class.keys.each do |key|
+        instance_variable_set("@#{key}".to_sym, args.delete(key))
+      end
+      raise ArgumentError, "Invalid argument(s): #{args.keys.map(&:inspect).join(' ')} -- KeyStruct accepts #{self.class.keys.map(&:inspect).join(' ')}" if args.any?
+    end
+
+    def ==(other)
+      self.class.keys.all?{|key| other.respond_to?(key) and self.send(key) == other.send(key)}
+    end
+
+    def <=>(other)
+      self.class.keys.each do |key|
+        cmp = (self.send(key) <=> other.send(key))
+        return cmp unless cmp == 0
+      end
+      0
+    end
+
+    def to_hash
+      Hash[*self.class.keys.map{ |key| [key, self.send(key)]}.flatten(1)]
+    end
+
+    def to_s
+      "[#{self.class.display_name} #{self.class.keys.map{|key| "#{key}:#{self.send(key)}"}.join(' ')}]"
+    end
+
+    def inspect
+      "<#{self.class.display_name}:0x#{self.object_id.to_s(16)} #{self.class.keys.map{|key| "#{key}:#{self.send(key).inspect}"}.join(' ')}>"
+    end
+
+    def self.display_name
+      self.name || "KeyStruct.#{access}"
+    end
+  end
+
+
   # for anonymous superclasses, such as
   #
   #    class Foo < KeyStruct[:a, :b]
@@ -42,53 +87,16 @@ module KeyStruct
 
   def self.define_key_struct(access, keys) 
     keys = keys.dup
-    defaults = (Hash === keys.last) ? keys.pop : {}
+    defaults = (Hash === keys.last) ? keys.pop.dup : {}
     keys += defaults.keys
 
-    Class.new.tap{ |klass| klass.class_eval do
-      include Comparable
-      send "attr_#{access}", *keys
-
-      define_singleton_method(:keys) { keys }
-      define_singleton_method(:defaults) { defaults }
-
-      define_method(:initialize) do |args={}|
-        args = defaults.merge(args)
-        keys.each do |key|
-          instance_variable_set("@#{key}".to_sym, args.delete(key))
-        end
-        raise ArgumentError, "Invalid argument(s): #{args.keys.map(&:inspect).join(' ')} -- KeyStruct accepts #{keys.map(&:inspect).join(' ')}" if args.any?
+    Class.new(Base).tap{ |klass|
+      klass.class_eval do
+        @keys = keys
+        @defaults = defaults
+        @access = access
+        send "attr_#{access}", *keys
       end
-
-      define_method(:==) do |other|
-        keys.all?{|key| other.respond_to?(key) and self.send(key) == other.send(key)}
-      end
-
-      define_method(:<=>) do |other|
-        keys.each do |key|
-          cmp = (self.send(key) <=> other.send(key))
-          return cmp unless cmp == 0
-        end
-        0
-      end
-
-      define_method(:to_hash) do
-        Hash[*keys.map{ |key| [key, self.send(key)]}.flatten(1)]
-      end
-
-      define_method(:to_s) do
-        "[#{self.class.display_name} #{keys.map{|key| "#{key}:#{self.send(key)}"}.join(' ')}]"
-      end
-
-      define_method(:inspect) do
-        "<#{self.class.display_name}:0x#{self.object_id.to_s(16)} #{keys.map{|key| "#{key}:#{self.send(key).inspect}"}.join(' ')}>"
-      end
-
-      define_singleton_method(:display_name) do
-        self.name || "KeyStruct.#{access}"
-      end
-
-    end
     }
   end
 
