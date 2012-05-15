@@ -134,6 +134,7 @@ Requires ruby >= 1.9.2.  (Has been tested on MRI 1.9.2 and MRI 1.9.3)
 
 Release Notes:
 
+* 0.4.2 - Bug fix: make class introspection work for derived classes.  Restore metaprogramming: inheritance too fragile.
 * 0.4.1 - Cache anonymous classes to avoid TypeError: superclass mismatch.  Nicer strings for anonymous classes.  Internals change: use base class rather than metaprogramming.
 * 0.4.0 - Introduce class introspection
 * 0.3.1 - Bug fix: to_hash when a value is an array.  Was raising ArgumentError for Hash
