@@ -74,6 +74,19 @@ shared_examples "a keystruct" do |method|
 
   end
 
+  context "returning hash" do
+
+    it "returns hash using to_hash" do
+      KeyStruct.send(method, :a => 3, :b => 4).new.to_hash.should == {:a => 3, :b => 4}
+    end
+
+    it "returns hash using to_hash when value is array" do
+      KeyStruct.send(method, :a => 3, :b => [[1,2], [3,4]]).new.to_hash.should == {:a => 3, :b => [[1,2],[3,4]]}
+    end
+
+  end
+
+
   context "comparison" do
 
     before(:each) do 
@@ -107,13 +120,7 @@ shared_examples "a keystruct" do |method|
 
   end
 
-  it "returns hash using to_hash" do
-    KeyStruct.send(method, :a => 3, :b => 4).new.to_hash.should == {:a => 3, :b => 4}
-  end
 
-  it "returns hash using to_hash when value is array" do
-    KeyStruct.send(method, :a => 3, :b => [[1,2], [3,4]]).new.to_hash.should == {:a => 3, :b => [[1,2],[3,4]]}
-  end
 
 
   context "display as a string" do
