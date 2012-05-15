@@ -31,7 +31,7 @@ module KeyStruct
         keys.each do |key|
           instance_variable_set("@#{key}".to_sym, args.delete(key))
         end
-        raise ArgumentError, "Invalid argument(s): #{args.keys.map(&:inspect).join(' ')}; KeyStruct accepts #{keys.map(&:inspect).join(' ')}" if args.any?
+        raise ArgumentError, "Invalid argument(s): #{args.keys.map(&:inspect).join(' ')} -- KeyStruct accepts #{keys.map(&:inspect).join(' ')}" if args.any?
       end
 
       define_method(:==) do |other|
