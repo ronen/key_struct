@@ -17,10 +17,6 @@ module KeyStruct
   class Base
     include Comparable
 
-    class << self
-      attr_reader :keys, :defaults, :access
-    end
-
     def initialize(args={})
       args = self.class.defaults.merge(args)
       self.class.keys.each do |key|
@@ -92,10 +88,10 @@ module KeyStruct
 
     Class.new(Base).tap{ |klass|
       klass.class_eval do
-        @keys = keys
-        @defaults = defaults
-        @access = access
         send "attr_#{access}", *keys
+        define_singleton_method(:keys) { keys }
+        define_singleton_method(:defaults) { defaults }
+        define_singleton_method(:access) { access }
       end
     }
   end

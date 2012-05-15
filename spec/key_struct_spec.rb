@@ -12,14 +12,6 @@ shared_examples "a keystruct" do |method|
       Class.should === @klass
     end
 
-    it "should instrospect keys" do
-      @klass.keys.should == [:a, :b, :c]
-    end
-
-    it "should instrospect defaults" do
-      @klass.defaults.should == {:c => 3}
-    end
-
     it "provides getters" do
       @klass.instance_methods.should include :a
       @klass.instance_methods.should include :b
@@ -49,6 +41,41 @@ shared_examples "a keystruct" do |method|
       reader.c.should == 3
     end
 
+  end
+
+  context "introspection"  do
+    context "when anonymous" do
+      before(:each) do
+        @klass = KeyStruct.send(method, :a, :b, :c => 3)
+      end
+
+      it "should instrospect keys" do
+        @klass.keys.should == [:a, :b, :c]
+      end
+
+      it "should instrospect defaults" do
+        @klass.defaults.should == {:c => 3}
+      end
+    end
+
+    context "when inherited" do
+      around(:each) do |example|
+        begin
+          class Inherited < KeyStruct.send(method, :p, :q, :r => 4)
+          end
+          example.run
+        ensure
+          Object.send(:remove_const, :Inherited)
+        end
+      end
+      it "should instrospect keys" do
+        Inherited.keys.should == [:p, :q, :r]
+      end
+
+      it "should instrospect defaults" do
+        Inherited.defaults.should == {:r => 4}
+      end
+    end
   end
 
   context "definition" do
