@@ -51,6 +51,29 @@ shared_examples "a keystruct" do |method|
 
   end
 
+  context "definition" do
+    it "can handle a default that's an array" do
+      expect { KeyStruct.send(method, :a => []) }.should_not raise_error
+    end
+
+    it "reuses existing anonymous class definition" do
+      k = KeyStruct.send(method, :a, :b => 3)
+      j = KeyStruct.send(method, :a, :b => 3)
+      k.should equal j
+    end
+
+    it "does not reuse non-anonymous class definition" do
+      begin
+        K = KeyStruct.send(method, :a, :b => 3)
+        j = KeyStruct.send(method, :a, :b => 3)
+        K.should_not equal j
+      ensure
+        Object.send(:remove_const, :K)
+      end
+    end
+
+  end
+
   context "comparison" do
 
     before(:each) do 
@@ -92,9 +115,6 @@ shared_examples "a keystruct" do |method|
     KeyStruct.send(method, :a => 3, :b => [[1,2], [3,4]]).new.to_hash.should == {:a => 3, :b => [[1,2],[3,4]]}
   end
 
-  it "can handle a default that's an array" do
-    expect { KeyStruct.send(method, :a => []) }.should_not raise_error
-  end
 
   context "display as a string" do
 

@@ -1,11 +1,11 @@
 module KeyStruct
 
   def self.reader(*keys)
-    define_key_struct(:attr_reader, keys)
+    fetch_key_struct(:reader, keys)
   end
 
   def self.accessor(*keys)
-    define_key_struct(:attr_accessor, keys)
+    fetch_key_struct(:accessor, keys)
   end
 
   instance_eval do
@@ -14,14 +14,40 @@ module KeyStruct
 
   private
 
-  def self.define_key_struct(access, keys) 
+  # for anonymous superclasses, such as
+  #
+  #    class Foo < KeyStruct[:a, :b]
+  #    end
+  #
+  #  we want to be sure that if the code gets re-executed (e.g. the file
+  #  gets loaded twice) the superclass will be the same object otherwise
+  #  ruby will raise a TypeError: superclass mismatch.  So keep a cache of
+  #  anonymous KeyStructs
+  #
+  #  But don't reuse the class if it has a name, i.e. if it was assigned to
+  #  a constant.  If somebody does
+  #
+  #     Foo = KeyStruct[:a, :b]
+  #     Bar = KeyStruct[:a, :b]
+  #
+  #  they should get different class definitions, in particular because the
+  #  classname is used in #to_s and #inspect
+  #
+  def self.fetch_key_struct(access, keys)
+    @cache ||= {}
+    signature = [access, keys]
+    @cache.delete(signature) if @cache[signature] and @cache[signature].name
+    @cache[signature] ||= define_key_struct(access, keys)
+  end
 
+  def self.define_key_struct(access, keys) 
+    keys = keys.dup
     defaults = (Hash === keys.last) ? keys.pop : {}
     keys += defaults.keys
 
     Class.new.tap{ |klass| klass.class_eval do
       include Comparable
-      send access, *keys
+      send "attr_#{access}", *keys
 
       define_singleton_method(:keys) { keys }
       define_singleton_method(:defaults) { defaults }
