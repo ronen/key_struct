@@ -121,24 +121,41 @@ shared_examples "a keystruct" do |method|
   end
 
 
+  context "string display" do
 
+    context "when anonymous" do
 
-  context "display as a string" do
+      before(:each) do
+        @klass = KeyStruct.send(method, :a => 3, :b => "hello")
+      end
 
-    around(:each) do |example|
-      PrintMe = @klass = KeyStruct.send(method, :a => 3, :b => "hello")
-      example.run
-      Object.send(:remove_const, :PrintMe)
+      it "should be nice for :to_s" do
+        @klass.new.to_s.should == "[KeyStruct.#{method} a:3 b:hello]"
+      end
+
+      it "should be detailed for :inspect" do
+        @klass.new.inspect.should match /<KeyStruct.#{method}:0x[0-9a-f]+ a:3 b:"hello">/
+      end
     end
 
-    it "should be nice for :to_s" do
-      @klass.new.to_s.should == "[PrintMe a:3 b:hello]"
+    context "when named" do
+      around(:each) do |example|
+        PrintMe = @klass = KeyStruct.send(method, :a => 3, :b => "hello")
+        example.run
+        Object.send(:remove_const, :PrintMe)
+      end
+
+      it "should be nice for :to_s" do
+        @klass.new.to_s.should == "[PrintMe a:3 b:hello]"
+      end
+
+      it "should be detailed for :inspect" do
+        @klass.new.inspect.should match /<PrintMe:0x[0-9a-f]+ a:3 b:"hello">/
+      end
     end
 
-    it "should be detailed for :inspect" do
-      @klass.new.inspect.should match /<PrintMe:0x[0-9a-f]+ a:3 b:"hello">/
-    end
   end
+
 
 end
 
