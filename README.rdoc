@@ -108,6 +108,14 @@ all members and their values:
 
         Name.new(:first => "Jack", :last => "Ripper").to_hash   # --> {:first => "Jack", :last => "Ripper")
 
+== Introspection
+
+KeyStruct classes let you examine their definition:
+
+        Name = KeyStruct[:first, :last => "Doe"]
+        Name.keys       # --> [ :first, :last ]
+        Name.defaults   # --> { :last => "Doe" }
+
 == Installation
 
 Install via:
