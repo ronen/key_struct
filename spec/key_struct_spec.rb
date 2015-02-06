@@ -19,19 +19,19 @@ shared_examples "a keystruct" do |method|
     end
 
     it "initializer accepts all key args" do
-      expect { @klass.new(:a => 1, :b => 2, :c => 3) }.should_not raise_error
+      expect { @klass.new(:a => 1, :b => 2, :c => 3) }.not_to raise_error
     end
 
     it "initializer accepts some key args" do
-      expect { @klass.new(:a => 1) }.should_not raise_error
+      expect { @klass.new(:a => 1) }.not_to raise_error
     end
 
     it "initializer accepts no args" do
-      expect { @klass.new }.should_not raise_error
+      expect { @klass.new }.not_to raise_error
     end
 
     it "initializer raises error for invalid args" do
-      expect { @klass.new(:d => 4) }.should raise_error
+      expect { @klass.new(:d => 4) }.to raise_error
     end
 
     it "getters returns initial/default argument values" do
@@ -80,7 +80,7 @@ shared_examples "a keystruct" do |method|
 
   context "definition" do
     it "can handle a default that's an array" do
-      expect { KeyStruct.send(method, :a => []) }.should_not raise_error
+      expect { KeyStruct.send(method, :a => []) }.not_to raise_error
     end
 
     it "reuses existing anonymous class definition" do
