@@ -1,5 +1,5 @@
 [![Gem Version](https://badge.fury.io/rb/key_struct.svg)](http://badge.fury.io/rb/key_struct)
-[![Build Status](https://secure.travis-ci.org/ronen/key_struct.svg)](http://travis-ci.org/ronen/key_sruct)
+[![Build Status](https://secure.travis-ci.org/ronen/key_struct.svg)](http://travis-ci.org/ronen/key_struct)
 [![Coverage Status](https://img.shields.io/coveralls/ronen/key_struct.svg)](https://coveralls.io/r/ronen/key_struct)
 
 # key_struct
