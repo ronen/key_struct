@@ -1,8 +1,10 @@
+[![Gem Version](https://badge.fury.io/rb/key_struct.svg)](http://badge.fury.io/rb/key_struct)
+[![Build Status](https://secure.travis-ci.org/ronen/key_struct.svg)](http://travis-ci.org/ronen/key_sruct)
+[![Coverage Status](https://img.shields.io/coveralls/ronen/key_struct.svg)](https://coveralls.io/r/ronen/key_struct)
+
 # key_struct
 
-Defines KeyStruct, which acts the same as ruby's Struct but the struct's
-initializer takes keyword args (using a hash, rails-style).  Use it to define
-a class via:
+Defines `KeyStruct`, which acts the same as ruby's Struct but the struct's initializer takes keyword args (using a hash, rails-style).  Use it to define a class via:
 
     Name = KeyStruct[:first, :last]
 
@@ -14,8 +16,7 @@ or as an anonymous base class for your own enhanced struct:
       end
     end
 
-Then you can create an instance of the class using keywords for the
-parameters:
+Then you can create an instance of the class using keywords for the parameters:
 
     name = Name.new(:first => "Jack", :last => "Ripper")
 
@@ -173,8 +174,3 @@ Future: I hope that this gem will be obviated in future versions of ruby.
 ## Copyright
 
 Released under the MIT License.  See LICENSE for details.
-
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/ronen/key_struct/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
