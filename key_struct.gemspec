@@ -7,10 +7,6 @@ Gem::Specification.new do |gem|
   gem.description   = %q{Defines KeyStruct analogous to Struct, but constructor takes keyword arguments}
   gem.summary       = %q{Defines KeyStruct analogous to Struct, but constructor takes keyword arguments}
   gem.homepage      = 'http://github.com/ronen/key_struct'
-  gem.extra_rdoc_files = [
-    'LICENSE',
-    'README.rdoc',
-  ]
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   gem.files         = `git ls-files`.split("\n")
@@ -20,7 +16,7 @@ Gem::Specification.new do |gem|
   gem.version       = KeyStruct::VERSION
 
   gem.required_ruby_version = ">= 1.9.2"
-  gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'rspec', "~> 2.14.0"
+  gem.add_development_dependency 'rake'
   gem.add_development_dependency 'simplecov'
-  gem.add_development_dependency 'simplecov-gem-adapter'
-end
+  gem.add_development_dependency 'simplecov-gem-profile' end
